@@ -1,0 +1,16 @@
+formatter.name: pretty
+extensions:
+    - PhpSpec\Extension\CodeCoverageExtension
+code_coverage:
+  format:
+    - html
+    - clover
+  output:
+    html: coverage
+    clover: coverage.xml
+suites:
+    CeepsUserBundle:
+        namespace: Ceeps\UserBundle
+        psr4_prefix: Ceeps\UserBundle
+        spec_path: .
+        src_path: src/

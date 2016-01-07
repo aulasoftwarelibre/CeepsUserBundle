@@ -1,0 +1,33 @@
+{
+    "name": "aulasoftwarelibre/ceeps-user-bundle",
+    "description": "Bundle de Identificacion del CEEPS",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergio Gomez",
+            "email": "sergio@uco.es"
+        }
+    ],
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-4": { "Ceeps\\UserBundle\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Ceeps\\UserBundle\\spec\\": "spec/" }
+    },
+    "require": {
+        "friendsofsymfony/user-bundle"      : "~2.0@dev",
+        "pdias/saml-bundle"                 : "dev-master",
+        "symfony/config"                    : "~2.8|~3.0",
+        "symfony/dependency-injection"      : "~2.8|~3.0",
+        "symfony/http-kernel"               : "~2.8|~3.0",
+        "symfony/security"                  : "~2.8|~3.0"
+    },
+    "require-dev": {
+        "henrikbjorn/phpspec-code-coverage" : "~2.0",
+        "phpspec/phpspec"                   : "~2.4"
+    }
+}

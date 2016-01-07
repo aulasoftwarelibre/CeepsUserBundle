@@ -1,0 +1,13 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block fos_user_content %}
+<div class="login-box-body">
+    <p class="login-box-msg">El registro de usuarios está deshabilitado.</p>
+
+    <div class="row">
+        <a class="btn btn-primary btn-block" href="{{ path("fos_user_security_login") }}">Iniciar sesión</a>
+    </div>
+</div>
+{% endblock %}
