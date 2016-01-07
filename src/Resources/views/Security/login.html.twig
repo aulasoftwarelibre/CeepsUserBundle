@@ -7,7 +7,7 @@
         {% if error %}
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {% endif %}
-        <p class="login-box-msg">Inicie sesión con un usuario local o con SIR</p>
+        <p class="login-box-msg">Inicie sesión con un usuario local o de la Universidad</p>
         <form action="{{ path("fos_user_security_check") }}" method="post">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
 
@@ -37,7 +37,7 @@
 
         <div class="social-auth-links text-center">
             <p>- O -</p>
-            <a href="{{ path('backend_saml_login_check') }}" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-sign-in"></i> Iniciar sesión con SIR</a>
+            <a href="{{ path('backend_saml_login_check') }}" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-sign-in"></i> Iniciar sesión con la UCO</a>
         </div>
 
         <a href="{{ path("fos_user_resetting_request") }}">He olvidado mi contraseña</a><br>
