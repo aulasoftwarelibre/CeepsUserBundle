@@ -12,7 +12,6 @@ namespace Ceeps\UserBundle\Security\User;
 
 
 use FOS\UserBundle\Model\UserManagerInterface;
-use FOS\UserBundle\Security\UserProvider;
 use PDias\SamlBundle\Saml\SamlAuth;
 use PDias\SamlBundle\Security\User\SamlUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -22,24 +21,31 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class FosBackendSamlUserProvider implements UserProviderInterface
 {
-    /** @var SamlAuth */
+    /**
+     * @var SamlAuth
+     */
     protected $samlAuth;
-    /** @var UserProvider */
-    protected $userProvider;
+    /**
+     * @var UserManagerInterface
+     */
+    private $userManager;
 
     public function __construct(SamlAuth $samlAuth, UserManagerInterface $userManager)
     {
         $this->samlAuth = $samlAuth;
-        $this->userProvider = new UserProvider($userManager);
+        $this->userManager = $userManager;
     }
 
     public function loadUserByUsername($username)
     {
         if ($this->samlAuth->isAuthenticated()) {
             $user = $this->findUserBySamlId($this->samlAuth->getUsername());
-            $samlUser = new SamlUser($user->getUsername(), $user->getRoles(), $this->samlAuth->getAttributes());
 
-            return $samlUser;
+            if (!$user) {
+                throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
+            }
+
+            return $user;
         }
 
         throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
@@ -56,13 +62,15 @@ class FosBackendSamlUserProvider implements UserProviderInterface
 
     public function supportsClass($class)
     {
-        return $this->userProvider->supportsClass($class);
+        $userClass = $this->userManager->getClass();
+
+        return $userClass === $class || is_subclass_of($class, $userClass);
     }
 
     public function findUserBySamlId($samlId)
     {
         preg_match('#(?<email>(?<username>[^/]+)@(?<organization>[^/]+))#', $samlId, $matches);
 
-        return $this->userProvider->loadUserByUsername($matches['email']);
+        return $this->userManager->findUserByUsername($matches['username']);
     }
 }
