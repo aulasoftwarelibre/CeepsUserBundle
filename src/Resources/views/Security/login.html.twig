@@ -11,7 +11,16 @@
             Iniciar sesión con tu usuario de la Universidad.
         </p>
 
+        {% if app.session.get('openiduco', 'login') == 'notfound' %}
+        <div class="alert alert-danger">
+            <h4>Tu usuario no está registrado.</h4>
+            Pásate por el CEEPS para darte de alta. Recuerda cerrar el navegador para
+            cerrar la sesión completamente si estás en un ordenador público.
+        </div>
+        {% else %}
         <div class="social-auth-links text-center">
             <a href="{{ path('backend_saml_login_check') }}" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-sign-in"></i> Iniciar sesión con la UCO</a>
         </div>
+        {% endif %}
+    </div>
 {% endblock %}

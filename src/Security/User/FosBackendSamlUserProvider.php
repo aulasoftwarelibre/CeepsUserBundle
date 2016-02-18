@@ -14,6 +14,7 @@ namespace Ceeps\UserBundle\Security\User;
 use FOS\UserBundle\Model\UserManagerInterface;
 use PDias\SamlBundle\Saml\SamlAuth;
 use PDias\SamlBundle\Security\User\SamlUser;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -29,22 +30,31 @@ class FosBackendSamlUserProvider implements UserProviderInterface
      * @var UserManagerInterface
      */
     private $userManager;
+    /**
+     * @var Session
+     */
+    private $session;
 
-    public function __construct(SamlAuth $samlAuth, UserManagerInterface $userManager)
+    public function __construct(SamlAuth $samlAuth, UserManagerInterface $userManager, Session $session)
     {
         $this->samlAuth = $samlAuth;
         $this->userManager = $userManager;
+        $this->session = $session;
     }
 
     public function loadUserByUsername($username)
     {
+        $this->session->set('openiduco', 'login');
+
         if ($this->samlAuth->isAuthenticated()) {
             $user = $this->findUserBySamlId($this->samlAuth->getUsername());
 
             if (!$user) {
+                $this->session->set('openiduco', 'notfound');
                 throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
             }
 
+            $this->session->set('openiduco', 'found');
             return $user;
         }
 
